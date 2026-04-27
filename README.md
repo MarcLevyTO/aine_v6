@@ -143,16 +143,21 @@ This stage executes the 7 stories from Stage 4 in order, producing the actual Ne
 |---|---|---|---|
 | 1.1 | Initialize the Next.js project | ✅ review | Next.js 16.2.4, React 19.2.4, TS 5.9.3, Tailwind 4.2.4. App scaffolded at repo root (originally in `aine/` subfolder, then flattened per user request — see story file for details). Three minor notes: Tailwind v4 uses CSS-based config; browser-console check verified server-side only; structural flatten added mid-story. |
 | 1.2 | Create the types and storage modules | ✅ review | `app/lib/types.ts` and `app/lib/storage.ts` created. `localStorage` is now isolated to one module per architecture mandate. TypeScript clean, ESLint clean. |
-| 1.3 | Build the empty-state page shell | ⏳ pending | |
-| 1.4 | Add a todo via the form, with persistence | ⏳ pending | |
-| 1.5 | Render the list of todos | ⏳ pending | |
-| 1.6 | Toggle todo completion bidirectionally | ⏳ pending | |
-| 1.7 | Cross-browser manual smoke test | ⏳ pending | |
+| 1.3 | Build the empty-state page shell | ✅ review | `app/page.tsx` rewritten as a `'use client'` component with `useState<Todo[]>([])` initial state and a mount-effect that calls `loadTodos()`. Renders Aine heading + "No todos yet" empty state. Lint suppressed once for `react-hooks/set-state-in-effect` since the architecture mandates this pattern. |
+| 1.4 | Add a todo via the form, with persistence | ✅ review | `AddTodoForm` component created (text input + submit, trim/reject-empty validation). Page wires `handleAdd` (functional setter, `crypto.randomUUID()` IDs) and a save-effect that calls `saveTodos(todos)` on every change. |
+| 1.5 | Render the list of todos | ✅ review | Extracted `TodoList` and `TodoItem` components. Empty state moved into `TodoList` per readiness-report recommendation. `handleToggle` stub added (real impl in 1.6). |
+| 1.6 | Toggle todo completion bidirectionally | ✅ review | Real `handleToggle` implemented with functional setter — `prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t)`. Save effect from 1.4 automatically persists. |
+| 1.7 | Cross-browser manual smoke test | 🟡 partial review | **Task 1 (automated) done:** TypeScript clean, ESLint clean, production build succeeds, HTTP smoke test 200, boundary discipline verified. **Task 2 (manual browser checks in Chrome / Firefox / Safari)** is pending user verification — see story file for step-by-step instructions. |
 
 **Per-story files** (rich implementation specs) live in `_bmad-output/implementation-artifacts/`:
 
 - [`1-1-initialize-the-nextjs-project.md`](_bmad-output/implementation-artifacts/1-1-initialize-the-nextjs-project.md) — done
 - [`1-2-create-types-and-storage.md`](_bmad-output/implementation-artifacts/1-2-create-types-and-storage.md) — done
+- [`1-3-empty-state-page-shell.md`](_bmad-output/implementation-artifacts/1-3-empty-state-page-shell.md) — done
+- [`1-4-add-todo-with-persistence.md`](_bmad-output/implementation-artifacts/1-4-add-todo-with-persistence.md) — done
+- [`1-5-render-todo-list.md`](_bmad-output/implementation-artifacts/1-5-render-todo-list.md) — done
+- [`1-6-toggle-completion.md`](_bmad-output/implementation-artifacts/1-6-toggle-completion.md) — done
+- [`1-7-cross-browser-smoke-test.md`](_bmad-output/implementation-artifacts/1-7-cross-browser-smoke-test.md) — automated portion done; manual browser checks pending user
 
 ---
 
@@ -262,9 +267,9 @@ Any code change should trace back through these documents. If a change requires 
 | 3. Architecture | ✅ Complete |
 | 4. Epics & Stories | ✅ Complete |
 | 4.5. Readiness Validation | ✅ Complete — green light |
-| 5. Implementation | 🔄 In progress — Stories 1.1 + 1.2 done; 1.3 next |
+| 5. Implementation | 🟡 Code complete (Stories 1.1 – 1.6 done; 1.7 awaiting manual cross-browser verification by user) |
 
-**Next step:** Create the per-story file for Story 1.3 (empty-state page shell), then implement it.
+**Next step:** Run `pnpm dev` from the repo root, open `http://localhost:3000/` in Chrome / Firefox / Safari on macOS, walk through the manual verification steps in [Story 1.7](_bmad-output/implementation-artifacts/1-7-cross-browser-smoke-test.md). When all three browsers pass, mark Story 1.7 Subtask 2.2 `[x]` and change its Status to `done`.
 
 ---
 
