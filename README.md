@@ -147,7 +147,7 @@ This stage executes the 7 stories from Stage 4 in order, producing the actual Ne
 | 1.4 | Add a todo via the form, with persistence | ✅ review | `AddTodoForm` component created (text input + submit, trim/reject-empty validation). Page wires `handleAdd` (functional setter, `crypto.randomUUID()` IDs) and a save-effect that calls `saveTodos(todos)` on every change. |
 | 1.5 | Render the list of todos | ✅ review | Extracted `TodoList` and `TodoItem` components. Empty state moved into `TodoList` per readiness-report recommendation. `handleToggle` stub added (real impl in 1.6). |
 | 1.6 | Toggle todo completion bidirectionally | ✅ review | Real `handleToggle` implemented with functional setter — `prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t)`. Save effect from 1.4 automatically persists. |
-| 1.7 | Cross-browser manual smoke test | 🟡 partial review | **Task 1 (automated) done:** TypeScript clean, ESLint clean, production build succeeds, HTTP smoke test 200, boundary discipline verified. **Task 2 (manual browser checks in Chrome / Firefox / Safari)** is pending user verification — see story file for step-by-step instructions. |
+| 1.7 | Cross-browser manual smoke test | ✅ done | Automated checks (TypeScript, ESLint, production build, HTTP, boundary discipline) all passed. Manual browser checks confirmed by user — NFR3 satisfied. |
 
 **Per-story files** (rich implementation specs) live in `_bmad-output/implementation-artifacts/`:
 
@@ -157,7 +157,7 @@ This stage executes the 7 stories from Stage 4 in order, producing the actual Ne
 - [`1-4-add-todo-with-persistence.md`](_bmad-output/implementation-artifacts/1-4-add-todo-with-persistence.md) — done
 - [`1-5-render-todo-list.md`](_bmad-output/implementation-artifacts/1-5-render-todo-list.md) — done
 - [`1-6-toggle-completion.md`](_bmad-output/implementation-artifacts/1-6-toggle-completion.md) — done
-- [`1-7-cross-browser-smoke-test.md`](_bmad-output/implementation-artifacts/1-7-cross-browser-smoke-test.md) — automated portion done; manual browser checks pending user
+- [`1-7-cross-browser-smoke-test.md`](_bmad-output/implementation-artifacts/1-7-cross-browser-smoke-test.md) — done
 
 ---
 
@@ -267,9 +267,15 @@ Any code change should trace back through these documents. If a change requires 
 | 3. Architecture | ✅ Complete |
 | 4. Epics & Stories | ✅ Complete |
 | 4.5. Readiness Validation | ✅ Complete — green light |
-| 5. Implementation | 🟡 Code complete (Stories 1.1 – 1.6 done; 1.7 awaiting manual cross-browser verification by user) |
+| 5. Implementation | ✅ Complete — all 7 stories (1.1 – 1.7) done; cross-browser verification confirmed |
 
-**Next step:** Run `pnpm dev` from the repo root, open `http://localhost:3000/` in Chrome / Firefox / Safari on macOS, walk through the manual verification steps in [Story 1.7](_bmad-output/implementation-artifacts/1-7-cross-browser-smoke-test.md). When all three browsers pass, mark Story 1.7 Subtask 2.2 `[x]` and change its Status to `done`.
+**The PoC is complete.** Every BMAD planning artifact (brief → PRD → architecture → epics → readiness validation) led to working code. NFR3 (cross-browser support in Chrome / Firefox / Safari) is verified.
+
+**Possible next moves:**
+
+- **Stop here** and consider this BMAD pass done — you have the full artifact trail and runnable code, which was the project's stated goal.
+- **Start a Phase 2 epic** by re-entering BMAD at the `bmad-create-story` (or earlier) stage with one of the post-MVP features from `epics.md` (edit/delete, due dates, categories, auth, sync). Each is intentionally chosen to exercise a different BMAD capability.
+- **Ship it** — the architecture is Vercel-ready; `vercel deploy` or a GitHub-Vercel connect would put Aine on the public internet without further config.
 
 ---
 

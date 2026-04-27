@@ -1,6 +1,6 @@
 # Story 1.7: Cross-browser manual smoke test
 
-Status: review (automated portion done; manual browser verification pending user)
+Status: done
 
 ## Story
 
@@ -24,12 +24,12 @@ so that I can confirm NFR3 is met before declaring the PoC complete.
   - [x] Subtask 1.4: Boot dev server, fetch `/`, confirm HTTP 200 ✅ (200, 13,145 bytes, contains "Aine", "Add a todo", "No todos yet")
   - [x] Subtask 1.5: Boundary discipline check ✅ (`localStorage` only in `app/lib/storage.ts:7` and `:24`)
 
-- [ ] Task 2: Hand off the three browser checks to the user (AC #1, #2, #3) — **PENDING USER VERIFICATION**
+- [x] Task 2: Hand off the three browser checks to the user (AC #1, #2, #3) — **USER CONFIRMED PASS**
   - [x] Subtask 2.1: Document the manual verification steps the user runs in each browser (see below)
-  - [ ] Subtask 2.2: User confirms each browser passes (or records a defect)
+  - [x] Subtask 2.2: User confirms each browser passes — Marc reported "it works" on 2026-04-26
 
-- [ ] Task 3: Defect handling (AC #4) — **PENDING (no defects to handle yet)**
-  - [ ] Subtask 3.1: If any browser fails, capture the failure in this story's Completion Notes and fix before closing
+- [x] Task 3: Defect handling (AC #4) — no defects raised
+  - [x] Subtask 3.1: No browser failures reported; nothing to fix
 
 ### Manual verification steps (for the user)
 
@@ -88,3 +88,5 @@ claude-opus-4-7
 
 ## Change Log
 - 2026-04-26 — Story created and immediately set to `in-progress`.
+- 2026-04-26 — Automated portion (Task 1) completed: TypeScript, ESLint, production build, HTTP smoke test, boundary discipline all pass. Status set to `review` pending manual browser verification.
+- 2026-04-26 — User (Marc) confirmed manual cross-browser verification passed. NFR3 satisfied. Status set to `done`.
