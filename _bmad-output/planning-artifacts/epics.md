@@ -110,6 +110,17 @@ These are explicitly out of scope for this BMAD iteration — they will each be 
 - **Epic 5 (Phase 3):** User accounts and authentication
 - **Epic 6 (Phase 3):** Cross-device sync (introduces backend)
 
+### Epic 2: Activity Rubric Closure (added 2026-04-26)
+
+Bring the project into line with the originating learning-activity rubric: automated test coverage, Docker deployment, QA audits, and an AI integration log. The original frontend-only architecture is retained; only what the rubric demands is added.
+
+**Stories:**
+
+- **Story 2.1** — Test infrastructure + unit/component/E2E tests + ≥70% coverage
+- **Story 2.2** — Dockerfile + docker-compose + `/api/health` route + dev/test profiles
+- **Story 2.3** — QA reports (coverage, accessibility via axe-in-Playwright, security review)
+- **Story 2.4** — AI integration log + README updates
+
 ## Epic 1: Manage a Persistent Todo List
 
 The user can capture, view, mark-complete, and re-open todo items in a single-screen browser app. All todos and their completion state survive page reloads and browser-tab restarts on the same device.

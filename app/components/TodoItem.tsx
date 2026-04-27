@@ -20,7 +20,7 @@ export default function TodoItem({ todo, onToggle }: Props) {
       <span
         className={
           todo.completed
-            ? 'text-sm text-foreground/50 line-through'
+            ? 'text-sm text-foreground/70 line-through'
             : 'text-sm'
         }
       >

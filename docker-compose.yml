@@ -1,0 +1,65 @@
+# Docker Compose orchestration for Aine.
+#
+# Profiles:
+#   - default (no profile): runs the production image (`docker compose up`)
+#   - dev: runs `pnpm dev` against the source tree with hot reload
+#         (`docker compose --profile dev up`)
+#   - test: runs the unit + E2E test suites against the production image
+#         (`docker compose --profile test run --rm test`)
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aine:latest
+    container_name: aine-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+
+  app-dev:
+    profiles: ["dev"]
+    image: node:22-alpine
+    container_name: aine-app-dev
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - aine-dev-node-modules:/app/node_modules
+      - aine-dev-next:/app/.next
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+    command: sh -c "corepack enable && corepack prepare pnpm@9.12.3 --activate && pnpm install --frozen-lockfile && pnpm dev"
+
+  test:
+    profiles: ["test"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: aine:test
+    container_name: aine-test
+    environment:
+      NODE_ENV: test
+      CI: "true"
+    command: sh -c "pnpm test && pnpm test:e2e"
+
+volumes:
+  aine-dev-node-modules:
+  aine-dev-next:

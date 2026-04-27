@@ -84,7 +84,9 @@ The project succeeds when:
 - The four core flows work end-to-end: (1) add a todo, (2) mark complete, (3) mark incomplete, (4) refresh and see todos still there.
 - Zero blocking bugs in the happy path on at least one supported browser.
 
-**Explicitly NOT success criteria:** user adoption, performance benchmarks, deployment, accessibility audits, polish, comparison to competitor todo apps, multi-device behavior.
+**Explicitly NOT success criteria (original scope):** user adoption, performance benchmarks, deployment, accessibility audits, polish, comparison to competitor todo apps, multi-device behavior.
+
+**Scope expansion (added 2026-04-26 after Story 1.7 closed):** the originating learning activity rubric requires deliverables beyond the original PoC scope — automated tests (≥70% coverage), Playwright E2E (≥5 tests), Docker Compose deployment, accessibility audit (zero critical WCAG violations), security review, and an AI integration log. These are added as a new Epic 2 ("Activity rubric closure"). The original frontend-only architecture is retained; a single `/api/health` route is added to satisfy Docker health-check requirements, but the data layer remains `localStorage` (no CRUD HTTP API). This divergence from the rubric's "Build the API for CRUD operations" guidance is documented in the AI integration log.
 
 ## User Journeys
 

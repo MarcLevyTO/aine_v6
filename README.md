@@ -267,15 +267,88 @@ Any code change should trace back through these documents. If a change requires 
 | 3. Architecture | ✅ Complete |
 | 4. Epics & Stories | ✅ Complete |
 | 4.5. Readiness Validation | ✅ Complete — green light |
-| 5. Implementation | ✅ Complete — all 7 stories (1.1 – 1.7) done; cross-browser verification confirmed |
+| 5. Implementation Epic 1 | ✅ Complete — all 7 stories (1.1 – 1.7) done; cross-browser verification confirmed |
+| 5b. Implementation Epic 2 | ✅ Complete — activity-rubric closure (tests, Docker, QA reports, AI log) |
 
-**The PoC is complete.** Every BMAD planning artifact (brief → PRD → architecture → epics → readiness validation) led to working code. NFR3 (cross-browser support in Chrome / Firefox / Safari) is verified.
+**The project is complete relative to both the original PoC PRD and the activity rubric.**
 
-**Possible next moves:**
+---
 
-- **Stop here** and consider this BMAD pass done — you have the full artifact trail and runnable code, which was the project's stated goal.
-- **Start a Phase 2 epic** by re-entering BMAD at the `bmad-create-story` (or earlier) stage with one of the post-MVP features from `epics.md` (edit/delete, due dates, categories, auth, sync). Each is intentionally chosen to exercise a different BMAD capability.
-- **Ship it** — the architecture is Vercel-ready; `vercel deploy` or a GitHub-Vercel connect would put Aine on the public internet without further config.
+## Setup & run instructions
+
+### Prerequisites
+- Node.js 22+ (verified on v25.2.1)
+- pnpm 9+ (verified on 9.12.3)
+- Docker + Docker Compose (only for the containerized flow)
+
+### Local development
+```bash
+pnpm install        # one-time
+pnpm dev            # http://localhost:3000
+```
+
+### Tests
+```bash
+pnpm test                # Vitest unit + component (23 tests)
+pnpm test:coverage       # same, with v8 coverage (target: ≥70% — actual: 100% lines / 93.75% branches)
+pnpm test:e2e            # Playwright E2E + axe-core accessibility (9 tests)
+pnpm test:e2e:ui         # Playwright UI mode (interactive runner)
+```
+
+### Production build (no Docker)
+```bash
+pnpm build               # produces .next/standalone/server.js
+pnpm start               # runs the production server on :3000
+```
+
+### Docker Compose
+```bash
+docker compose up                                     # production image, host :3000 → container :3000
+docker compose --profile dev up                       # hot-reload dev server in a container
+docker compose --profile test run --rm test          # run unit + E2E tests in a container
+docker compose logs app                                # health check + request logs
+```
+
+The `app` service has both a Dockerfile-level `HEALTHCHECK` and a Compose-level `healthcheck`. `/api/health` returns:
+```json
+{ "status": "ok", "service": "aine", "timestamp": "2026-04-27T..." }
+```
+
+---
+
+## Stage 5b: Activity rubric closure (Epic 2)
+
+| Story | Title | Status | What it produced |
+|---|---|---|---|
+| 2.1 | Test infrastructure + tests | ✅ done | Vitest + RTL + Playwright + axe-core; 23 unit/component tests + 9 E2E tests; 100% lines / 93.75% branches coverage |
+| 2.2 | Docker + health check | ✅ done | Multi-stage `Dockerfile`, `docker-compose.yml` with `dev` and `test` profiles, `/api/health` endpoint |
+| 2.3 | QA reports | ✅ done | Coverage report, accessibility report (zero critical/serious WCAG violations after one fix), security review covering all applicable OWASP risks |
+| 2.4 | AI integration log + README | ✅ done | This README's setup section + the [AI integration log](_bmad-output/implementation-artifacts/2-4-ai-integration-log.md) |
+
+### One real defect found by the QA tooling
+
+`@axe-core/playwright` flagged a WCAG color-contrast violation on completed-todo text (`text-foreground/50` ≈ 3.4:1, below AA's 4.5:1). Bumped to `text-foreground/70` (≈7:1, exceeds AA). Documented in [Story 2.1](_bmad-output/implementation-artifacts/2-1-test-infrastructure-and-tests.md) and [Story 2.3](_bmad-output/implementation-artifacts/2-3-qa-reports.md).
+
+---
+
+## AI integration
+
+This entire project — every BMAD artifact, every line of code, every test, every Dockerfile — was produced through AI-assisted development with Claude Code. The full log is in [`_bmad-output/implementation-artifacts/2-4-ai-integration-log.md`](_bmad-output/implementation-artifacts/2-4-ai-integration-log.md), covering:
+
+- Which BMAD skill / persona did what
+- Prompts that worked best
+- MCP server usage (and honest accounting for what was *not* used)
+- Test generation: how AI assisted and what it initially missed
+- Debugging cases where AI was the right tool
+- Limitations encountered and where human judgment was required
+
+---
+
+## Possible next moves
+
+- **Ship it** — Vercel-ready; `vercel deploy` or a GitHub-Vercel connect would put Aine on the public internet without further config.
+- **Start a Phase 2 epic** with one of the post-MVP features from `epics.md` (edit/delete, due dates, categories, auth, sync). Each is intentionally chosen to exercise a different BMAD capability.
+- **Run the full Lighthouse audit** (deferred per Story 2.3's performance note) if performance becomes a real concern.
 
 ---
 
